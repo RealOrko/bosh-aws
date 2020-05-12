@@ -32,6 +32,19 @@ resource "aws_subnet" "cloudfoundary_public_subnet" {
     }
 }
 
+# ROUTING TABLE
+
+resource "aws_route_table" "cloudfoundry_route_table" {
+    vpc_id = aws_vpc.cloudfoundary_vpc.id
+    route {
+        cidr_block = "0.0.0.0/0"
+        gateway_id = aws_internet_gateway.cloudfoundary_internet_gateway.id
+    }
+    tags = {
+        Name = "cloudfoundry_route_table"
+    }
+}
+
 # SECURITY GROUP
 
 resource "aws_security_group" "cloudfoundary_security_group" {
