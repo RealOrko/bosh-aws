@@ -71,4 +71,4 @@ bosh env
 
 scp -o "StrictHostKeyChecking no" -i $TF_PRIVATE_KEY_PATH $(pwd)/.environment vcap@$BOSH_GW_HOST:~/
 scp -o "StrictHostKeyChecking no" -i $TF_PRIVATE_KEY_PATH $(pwd)/install-cf.sh vcap@$BOSH_GW_HOST:~/
-ssh -o "StrictHostKeyChecking no" -i $TF_PRIVATE_KEY_PATH vcap@$BOSH_GW_HOST '~/install-cf.sh'
+#ssh -o "StrictHostKeyChecking no" -i $TF_PRIVATE_KEY_PATH vcap@$BOSH_GW_HOST '~/install-cf.sh'
