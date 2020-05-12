@@ -1,7 +1,5 @@
 #!/usr/bin/env bash
 
-ssh-add -D $(pwd)/.privatekey
-rm -rf $(pwd)/.privatekey
 source <(sed -E -n 's/[^#]+/export &/ p' .environment)
 
 cd ./cloudfoundry-bosh-deploy
@@ -31,3 +29,6 @@ bosh delete-env bosh.yml \
 cd --
 
 terraform destroy --auto-approve
+
+ssh-add -D $(pwd)/.privatekey
+rm -rf $(pwd)/.privatekey
