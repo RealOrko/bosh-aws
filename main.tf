@@ -45,6 +45,13 @@ resource "aws_route_table" "cloudfoundry_route_table" {
     }
 }
 
+# ROUTING TABLE ASSOCIATION
+
+resource "aws_route_table_association" "cloudfoundary_subnet_routetable_association" {
+    subnet_id      = aws_subnet.cloudfoundary_public_subnet.id
+    route_table_id = aws_route_table.cloudfoundry_route_table.id
+}
+
 # SECURITY GROUP
 
 resource "aws_security_group" "cloudfoundary_security_group" {
