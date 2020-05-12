@@ -2,7 +2,7 @@
 
 source <(sed -E -n 's/[^#]+/export &/ p' .environment)
 
-bosh delete-env $(pwd)/bosh.yml \
+bosh delete-env $BOSH_ROOT_DIRECTORY/bosh.yml \
   --state=$BOSH_ROOT_DIRECTORY/state.json \
   --vars-store=$BOSH_ROOT_DIRECTORY/creds.yml \
   -o $BOSH_ROOT_DIRECTORY/aws/cpi.yml \
