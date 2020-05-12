@@ -10,6 +10,15 @@ resource "aws_vpc" "cloudfoundary_vpc" {
     }
 }
 
+# GATEWAY
+
+resource "aws_internet_gateway" "cloudfoundary_internet_gateway" {
+    vpc_id  = aws_vpc.cloudfoundary_vpc.id
+    tags = {
+        Name = "cloudfoundary_internet_gateway"
+    }
+}
+
 # VPC SUBNET
 
 resource "aws_subnet" "cloudfoundary_public_subnet" {
@@ -17,6 +26,7 @@ resource "aws_subnet" "cloudfoundary_public_subnet" {
     cidr_block              = var.vpc_subnet_cidr_block
     map_public_ip_on_launch = var.vpc_subnet_map_public_ip_on_launch 
     availability_zone       = var.vpc_subnet_availability_zone
+    depends_on              = [aws_internet_gateway.cloudfoundary_internet_gateway]
     tags = {
         Name = "cloudfoundary_public_subnet"
     }
@@ -66,6 +76,7 @@ resource "aws_security_group" "cloudfoundary_security_group" {
 resource "aws_eip" "cloudfoundary_elastic_ip" {
     vpc                       = true
     associate_with_private_ip = var.elastic_ip_internal_ip
+    depends_on                = [aws_internet_gateway.cloudfoundary_internet_gateway]
     tags = {
         Name = "cloudfoundary_elastic_ip"
     }
@@ -79,9 +90,9 @@ resource "tls_private_key" "cloudfoundry_private_key" {
 }
 
 resource "aws_key_pair" "cloudfoundry_keypair" {
-    key_name   = "cloudfoundary_keypair"
+    key_name   = "cloudfoundry_keypair"
     public_key = tls_private_key.cloudfoundry_private_key.public_key_openssh
     tags = {
-        Name = "cloudfoundary_keypair"
+        Name = "cloudfoundry_keypair"
     }
 }

@@ -27,7 +27,7 @@ output "cloudfoundry_vpc_subnet_cidr_block" {
 }
 
 output "cloudfoundry_keyname" {
-    value = "cloudfoundry_keypair"
+    value = aws_key_pair.cloudfoundry_keypair.key_name
 }
 
 output "cloudfoundry_private_key" {
