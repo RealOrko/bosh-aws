@@ -2,6 +2,8 @@
 
 terraform init
 terraform apply --auto-approve
+
+rm -rf $(pwd)/cloudfoundry-bosh-deploy
 git clone https://github.com/cloudfoundry/bosh-deployment.git $(pwd)/cloudfoundry-bosh-deploy
 
 IFS=
@@ -23,6 +25,7 @@ export TF_PRIVATE_KEY_PATH=$(pwd)/.privatekey
 export TF_INTERNAL_GW=10.0.0.1
 
 rm -rf $(pwd)/.environment
+echo BOSH_ROOT_DIRECTORY=$BOSH_ROOT_DIRECTORY >> $(pwd)/.environment
 echo TF_DIRECTOR_NAME=$TF_DIRECTOR_NAME >> $(pwd)/.environment
 echo TF_EXTERNAL_IP=$TF_EXTERNAL_IP >> $(pwd)/.environment
 echo TF_INTERNAL_IP=$TF_INTERNAL_IP >> $(pwd)/.environment
@@ -33,9 +36,6 @@ echo TF_AVAILABILITY_ZONE=$TF_AVAILABILITY_ZONE >> $(pwd)/.environment
 echo TF_SECURITY_GROUP=$TF_SECURITY_GROUP >> $(pwd)/.environment
 echo TF_DEFAULT_KEY_NAME=$TF_DEFAULT_KEY_NAME >> $(pwd)/.environment
 echo TF_PRIVATE_KEY_PATH=$TF_PRIVATE_KEY_PATH >> $(pwd)/.environment
-echo BOSH_ROOT_DIRECTORY=$BOSH_ROOT_DIRECTORY >> $(pwd)/.environment
-
-git clone https://github.com/cloudfoundry/bosh-deployment.git $BOSH_ROOT_DIRECTORY
 
 bosh create-env $BOSH_ROOT_DIRECTORY/bosh.yml \
   --state=$BOSH_ROOT_DIRECTORY/state.json \
@@ -68,3 +68,7 @@ export BOSH_GW_USER=vcap
 export BOSH_GW_PRIVATE_KEY=$TF_PRIVATE_KEY_PATH
 
 bosh env
+
+scp -i $TF_PRIVATE_KEY_PATH $(pwd)/.environment vcap@$BOSH_GW_HOST:~/
+scp -i $TF_PRIVATE_KEY_PATH $(pwd)/install-cloudfoundry.sh vcap@$BOSH_GW_HOST:~/
+ssh -i $TF_PRIVATE_KEY_PATH vcap@$BOSH_GW_HOST ~/install-cloudfoundry.sh
