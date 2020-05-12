@@ -69,6 +69,6 @@ export BOSH_GW_PRIVATE_KEY=$TF_PRIVATE_KEY_PATH
 
 bosh env
 
-scp -i $TF_PRIVATE_KEY_PATH $(pwd)/.environment vcap@$BOSH_GW_HOST:~/
-scp -i $TF_PRIVATE_KEY_PATH $(pwd)/install-cloudfoundry.sh vcap@$BOSH_GW_HOST:~/
-ssh -i $TF_PRIVATE_KEY_PATH vcap@$BOSH_GW_HOST ~/install-cloudfoundry.sh
+scp -o "StrictHostKeyChecking no" -i $TF_PRIVATE_KEY_PATH $(pwd)/.environment vcap@$BOSH_GW_HOST:~/
+scp -o "StrictHostKeyChecking no" -i $TF_PRIVATE_KEY_PATH $(pwd)/install-cloudfoundry.sh vcap@$BOSH_GW_HOST:~/
+ssh -o "StrictHostKeyChecking no" -i $TF_PRIVATE_KEY_PATH vcap@$BOSH_GW_HOST ~/install-cloudfoundry.sh
