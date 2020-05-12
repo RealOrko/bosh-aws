@@ -2,16 +2,16 @@
 
 source <(sed -E -n 's/[^#]+/export &/ p' .environment)
 
-cd ./cloudfoundry-bosh-deploy
+export BOSH_ROOT_DIRECTORY=$(pwd)/cloudfoundry-bosh-deploy
 
-bosh delete-env bosh.yml \
-  --state state.json \
-  --vars-store ./creds.yml \
-  -o aws/cpi.yml \
-  -o bosh-lite.yml \
-  -o bosh-lite-runc.yml \
-  -o jumpbox-user.yml \
-  -o external-ip-with-registry-not-recommended.yml \
+bosh delete-env $BOSH_ROOT_DIRECTORY/bosh.yml \
+  --state=$BOSH_ROOT_DIRECTORY/state.json \
+  --vars-store=$BOSH_ROOT_DIRECTORY/creds.yml \
+  -o $BOSH_ROOT_DIRECTORY/aws/cpi.yml \
+  -o $BOSH_ROOT_DIRECTORY/bosh-lite.yml \
+  -o $BOSH_ROOT_DIRECTORY/bosh-lite-runc.yml \
+  -o $BOSH_ROOT_DIRECTORY/jumpbox-user.yml \
+  -o $BOSH_ROOT_DIRECTORY/external-ip-with-registry-not-recommended.yml \
   -v director_name=$TF_DIRECTOR_NAME \
   -v internal_cidr=$TF_INTERNAL_CIDR \
   -v internal_gw=$TF_INTERNAL_GW \
@@ -25,8 +25,6 @@ bosh delete-env bosh.yml \
   --var-file private_key=$TF_PRIVATE_KEY_PATH \
   -v subnet_id=$TF_SUBNET_ID \
   -v external_ip=$TF_EXTERNAL_IP
-
-cd --
 
 terraform destroy --auto-approve
 

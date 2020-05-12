@@ -32,16 +32,16 @@ echo TF_SECURITY_GROUP=$TF_SECURITY_GROUP >> $(pwd)/.environment
 echo TF_DEFAULT_KEY_NAME=$TF_DEFAULT_KEY_NAME >> $(pwd)/.environment
 echo TF_PRIVATE_KEY_PATH=$TF_PRIVATE_KEY_PATH >> $(pwd)/.environment
 
-cd ./cloudfoundry-bosh-deploy
+export BOSH_ROOT_DIRECTORY=$(pwd)/cloudfoundry-bosh-deploy
 
-bosh create-env bosh.yml \
-  --state=state.json \
-  --vars-store=creds.yml \
-  -o aws/cpi.yml \
-  -o bosh-lite.yml \
-  -o bosh-lite-runc.yml \
-  -o jumpbox-user.yml \
-  -o external-ip-with-registry-not-recommended.yml \
+bosh create-env $BOSH_ROOT_DIRECTORY/bosh.yml \
+  --state=$BOSH_ROOT_DIRECTORY/state.json \
+  --vars-store=$BOSH_ROOT_DIRECTORY/creds.yml \
+  -o $BOSH_ROOT_DIRECTORY/aws/cpi.yml \
+  -o $BOSH_ROOT_DIRECTORY/bosh-lite.yml \
+  -o $BOSH_ROOT_DIRECTORY/bosh-lite-runc.yml \
+  -o $BOSH_ROOT_DIRECTORY/jumpbox-user.yml \
+  -o $BOSH_ROOT_DIRECTORY/external-ip-with-registry-not-recommended.yml \
   -v director_name=$TF_DIRECTOR_NAME \
   -v internal_cidr=$TF_INTERNAL_CIDR \
   -v internal_gw=$TF_INTERNAL_GW \
@@ -56,13 +56,10 @@ bosh create-env bosh.yml \
   -v subnet_id=$TF_SUBNET_ID \
   -v external_ip=$TF_EXTERNAL_IP
 
-cd --
-
-export BOSH_ROOT_PATH=$(pwd)
 export BOSH_ENVIRONMENT=$TF_EXTERNAL_IP
-export BOSH_CA_CERT="$(bosh int $BOSH_ROOT_PATH/cloudfoundry-bosh-deploy/creds.yml --path /director_ssl/ca)"
+export BOSH_CA_CERT="$(bosh int $BOSH_ROOT_DIRECTORY/creds.yml --path /director_ssl/ca)"
 export BOSH_CLIENT=admin
-export BOSH_CLIENT_SECRET="$(bosh int $BOSH_ROOT_PATH/cloudfoundry-bosh-deploy/creds.yml --path /admin_password)"
+export BOSH_CLIENT_SECRET="$(bosh int $BOSH_ROOT_DIRECTORY/creds.yml --path /admin_password)"
 export BOSH_GW_HOST=$BOSH_ENVIRONMENT
 export BOSH_GW_USER=vcap
 export BOSH_GW_PRIVATE_KEY=$TF_PRIVATE_KEY_PATH
