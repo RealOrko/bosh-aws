@@ -1,3 +1,9 @@
+# EIP
+
+variable "elastic_ip_internal_ip" {
+    default = "10.0.0.12"
+}
+
 # VPC
 
 variable "vpc_dns_support" {

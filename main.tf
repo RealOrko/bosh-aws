@@ -1,32 +1,32 @@
 # VPC
 
-resource "aws_vpc" "cloud_foundary_vpc" {
+resource "aws_vpc" "cloudfoundary_vpc" {
     cidr_block           = var.vpc_cidr_block
     instance_tenancy     = var.vpc_instance_tenancy 
     enable_dns_support   = var.vpc_dns_support 
     enable_dns_hostnames = var.vpc_dns_hostnames
     tags = {
-        Name = "cloud_foundary_vpc"
+        Name = "cloudfoundary_vpc"
     }
 }
 
 # VPC SUBNET
 
-resource "aws_subnet" "cloud_foundary_public_subnet" {
-    vpc_id                  = aws_vpc.cloud_foundary_vpc.id
+resource "aws_subnet" "cloudfoundary_public_subnet" {
+    vpc_id                  = aws_vpc.cloudfoundary_vpc.id
     cidr_block              = var.vpc_subnet_cidr_block
     map_public_ip_on_launch = var.vpc_subnet_map_public_ip_on_launch 
     availability_zone       = var.vpc_subnet_availability_zone
     tags = {
-        Name = "cloud_foundary_public_subnet"
+        Name = "cloudfoundary_public_subnet"
     }
 }
 
 # SECURITY GROUP
 
-resource "aws_security_group" "cloud_foundary_security_group" {
-    name            = "cloud_foundary_security_group"
-    vpc_id          = aws_vpc.cloud_foundary_vpc.id
+resource "aws_security_group" "cloudfoundary_security_group" {
+    name            = "cloudfoundary_security_group"
+    vpc_id          = aws_vpc.cloudfoundary_vpc.id
 
     ingress {
         from_port   = 22
@@ -56,7 +56,32 @@ resource "aws_security_group" "cloud_foundary_security_group" {
         cidr_blocks = var.security_group_engress_cidr_ranges  
     }
     tags = {
-        Name = "cloud_foundary_security_group"
+        Name = "cloudfoundary_security_group"
         Description = "Cloud foundary security group"
+    }
+}
+
+# ELASTIC IP
+
+resource "aws_eip" "cloudfoundary_elastic_ip" {
+    vpc                       = true
+    associate_with_private_ip = var.elastic_ip_internal_ip
+    tags = {
+        Name = "cloudfoundary_elastic_ip"
+    }
+}
+
+# KEY PAIR
+
+resource "tls_private_key" "cloudfoundry_private_key" {
+  algorithm = "RSA"
+  rsa_bits  = 4096
+}
+
+resource "aws_key_pair" "cloudfoundry_keypair" {
+    key_name   = "cloudfoundary_keypair"
+    public_key = tls_private_key.cloudfoundry_private_key.public_key_openssh
+    tags = {
+        Name = "cloudfoundary_keypair"
     }
 }
