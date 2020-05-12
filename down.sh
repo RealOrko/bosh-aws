@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
-#ssh-add -D $(pwd)/.privatekey
-#rm -rf $(pwd)/.privatekey
+ssh-add -D $(pwd)/.privatekey
+rm -rf $(pwd)/.privatekey
 source <(sed -E -n 's/[^#]+/export &/ p' .environment)
 
 cd ./cloudfoundry-bosh-deploy
