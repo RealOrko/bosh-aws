@@ -2,6 +2,7 @@
 
 terraform init
 terraform apply --auto-approve
+git clone https://github.com/cloudfoundry/bosh-deployment.git $(pwd)/cloudfoundry-bosh-deploy
 
 IFS=
 rm -rf $(pwd)/.privatekey
@@ -32,6 +33,9 @@ echo TF_AVAILABILITY_ZONE=$TF_AVAILABILITY_ZONE >> $(pwd)/.environment
 echo TF_SECURITY_GROUP=$TF_SECURITY_GROUP >> $(pwd)/.environment
 echo TF_DEFAULT_KEY_NAME=$TF_DEFAULT_KEY_NAME >> $(pwd)/.environment
 echo TF_PRIVATE_KEY_PATH=$TF_PRIVATE_KEY_PATH >> $(pwd)/.environment
+echo BOSH_ROOT_DIRECTORY=$BOSH_ROOT_DIRECTORY >> $(pwd)/.environment
+
+git clone https://github.com/cloudfoundry/bosh-deployment.git $BOSH_ROOT_DIRECTORY
 
 bosh create-env $BOSH_ROOT_DIRECTORY/bosh.yml \
   --state=$BOSH_ROOT_DIRECTORY/state.json \
