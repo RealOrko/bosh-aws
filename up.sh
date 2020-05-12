@@ -56,3 +56,14 @@ bosh create-env bosh.yml \
   -v external_ip=$TF_EXTERNAL_IP
 
 cd --
+
+export BOSH_ROOT_PATH=$(pwd)
+export BOSH_ENVIRONMENT=$TF_EXTERNAL_IP
+export BOSH_CA_CERT="$(bosh int $BOSH_ROOT_PATH/cloudfoundry-bosh-deploy/creds.yml --path /director_ssl/ca)"
+export BOSH_CLIENT=admin
+export BOSH_CLIENT_SECRET="$(bosh int $BOSH_ROOT_PATH/cloudfoundry-bosh-deploy/creds.yml --path /admin_password)"
+export BOSH_GW_HOST=$BOSH_ENVIRONMENT
+export BOSH_GW_USER=vcap
+export BOSH_GW_PRIVATE_KEY=$TF_PRIVATE_KEY_PATH
+
+bosh env
