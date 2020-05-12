@@ -9,6 +9,7 @@ echo $(terraform output cloudfoundry_private_key) > .privatekey
 chmod 400 $(pwd)/.privatekey
 ssh-add $(pwd)/.privatekey
 
+export BOSH_ROOT_DIRECTORY=$(pwd)/cloudfoundry-bosh-deploy
 export TF_DIRECTOR_NAME="cloudfoundry-bosh-director"
 export TF_EXTERNAL_IP=$(terraform output cloudfoundry_elastic_ip_public_ip) 
 export TF_INTERNAL_IP=$(terraform output cloudfoundry_elastic_ip_private_ip) 
@@ -31,8 +32,6 @@ echo TF_AVAILABILITY_ZONE=$TF_AVAILABILITY_ZONE >> $(pwd)/.environment
 echo TF_SECURITY_GROUP=$TF_SECURITY_GROUP >> $(pwd)/.environment
 echo TF_DEFAULT_KEY_NAME=$TF_DEFAULT_KEY_NAME >> $(pwd)/.environment
 echo TF_PRIVATE_KEY_PATH=$TF_PRIVATE_KEY_PATH >> $(pwd)/.environment
-
-export BOSH_ROOT_DIRECTORY=$(pwd)/cloudfoundry-bosh-deploy
 
 bosh create-env $BOSH_ROOT_DIRECTORY/bosh.yml \
   --state=$BOSH_ROOT_DIRECTORY/state.json \
