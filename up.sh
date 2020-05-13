@@ -40,7 +40,7 @@ echo TF_PRIVATE_KEY_PATH=$TF_PRIVATE_KEY_PATH >> $(pwd)/.environment
 bosh create-env $BOSH_ROOT_DIRECTORY/bosh.yml \
   --state=$BOSH_ROOT_DIRECTORY/state.json \
   --vars-store=$BOSH_ROOT_DIRECTORY/creds.yml \
-  -o $BOSH_ROOT_DIRECTORY/aws/cpi.yml \
+  -o $(pwd)/providers/aws/cpi.yml \
   -o $BOSH_ROOT_DIRECTORY/bosh-lite.yml \
   -o $BOSH_ROOT_DIRECTORY/bosh-lite-runc.yml \
   -o $BOSH_ROOT_DIRECTORY/jumpbox-user.yml \
