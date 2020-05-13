@@ -10,7 +10,7 @@
   path: /resource_pools/name=vms/stemcell?
   type: replace
   value:
-    sha1: 108d7bba8eee73fac3030758c1ab36f1fc573356
+    sha1: b2d12c35dafb0982ccf85ee2924d4fea4195622a
     url: https://cryosharp-bosh.s3.eu-west-2.amazonaws.com/bosh-stemcell-1.00-aws-xen-ubuntu-xenial-go_agent-lite.tgz
 - path: /resource_pools/name=vms/cloud_properties?
   type: replace
